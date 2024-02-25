@@ -3,7 +3,7 @@
 **Setup:**
 
 1. Requires a MySQL instance to store urls.
-2. Update [application.properties](resources/application.properties) with your database's host, username and password.
+2. Update [application.properties](src/main/resources/application.properties) with your database's host, username and password.
 
 **Building and deploying locally:**
 
