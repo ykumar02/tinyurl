@@ -58,6 +58,7 @@ public class UrlController {
     }
 
     @PostMapping("/url")
+    @ResponseStatus(HttpStatus.CREATED)
     public String create(@RequestBody Map<String, String> body) {
         String longUrl = body.get("longUrl");
         if (StringUtils.isEmpty(longUrl)) {
