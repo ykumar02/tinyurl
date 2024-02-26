@@ -22,5 +22,6 @@
 **Test Coverage:**
 
 * Build report: `gradle jacocoTestReport`
+* Open report: `open build/reports/jacoco/test/html/tinyurl/index.html`
 * Coverage report:
   ![test-coverage-report.png](src%2Ftest%2Fresources%2Ftest-coverage-report.png)
