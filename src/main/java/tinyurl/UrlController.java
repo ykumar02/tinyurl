@@ -46,13 +46,13 @@ public class UrlController {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Unable to find long url, please try again later.");
         }
 
-        CompletableFuture.runAsync(() -> {
+        optUrl.ifPresent(url -> CompletableFuture.runAsync(() -> {
             try {
-                optUrl.ifPresent(url -> urlStatRepository.save(new UrlStat(url, clock.millis())));
+                urlStatRepository.save(new UrlStat(url, clock.millis()));
             } catch (Exception ex) {
                 log.error("Unable to save url stats.", ex);
             }
-        });
+        }));
 
         return optUrl.map(Url::getLongUrl)
                      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No url found for the short url provided."));
