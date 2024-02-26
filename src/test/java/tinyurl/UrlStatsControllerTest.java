@@ -1,6 +1,7 @@
 package tinyurl;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -54,7 +55,7 @@ public class UrlStatsControllerTest {
         WindowStat weekStat = new WindowStat(WindowStat.Window.WEEK, 1000);
         WindowStat allStat = new WindowStat(WindowStat.Window.ALL, 10000);
         Instant currentInstant = clock.instant();
-        when(urlRepository.findByShortUrl(any(String.class))).thenReturn(Optional.of(savedUrl));
+        when(urlRepository.findByShortUrl(eq(savedUrl.getShortUrl()))).thenReturn(Optional.of(savedUrl));
         when(urlStatRepository.countBy(eq(savedUrl.getId()), eq(dayStat.window.getQueryTimestamp(currentInstant.toEpochMilli()))))
                 .thenReturn(dayStat.count);
         when(urlStatRepository.countBy(eq(savedUrl.getId()), eq(weekStat.window.getQueryTimestamp(currentInstant.toEpochMilli()))))
@@ -67,6 +68,25 @@ public class UrlStatsControllerTest {
                .andExpect(status().isOk())
                .andDo(print())
                .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(dayStat, weekStat, allStat))));
+    }
+
+    @Test
+    void testUrlStatsUnavailable() throws Exception {
+        // given
+        Url savedUrl = new Url(1, "shortUrl", "longUrl");
+        when(urlRepository.findByShortUrl(any(String.class))).thenThrow(new RuntimeException());
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/urlStats/" + savedUrl.getShortUrl()))
+               .andExpect(status().isServiceUnavailable());
+
+        // given
+        when(urlRepository.findByShortUrl(any(String.class))).thenReturn(Optional.of(savedUrl));
+        when(urlStatRepository.countBy(anyLong(), anyLong())).thenThrow(new RuntimeException());
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/urlStats/" + savedUrl.getShortUrl()))
+               .andExpect(status().isServiceUnavailable());
     }
 
     @TestConfiguration

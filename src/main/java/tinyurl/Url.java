@@ -21,7 +21,6 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
     @Nonnull
     @Column(name = "short_url")
     private String shortUrl;
@@ -48,24 +47,12 @@ public class Url {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getShortUrl() {
         return shortUrl;
     }
 
-    public void setShortUrl(String shortUrl) {
-        this.shortUrl = shortUrl;
-    }
-
     public String getLongUrl() {
         return longUrl;
-    }
-
-    public void setLongUrl(String url) {
-        this.longUrl = url;
     }
 
     @Override

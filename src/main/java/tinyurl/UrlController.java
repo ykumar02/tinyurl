@@ -23,10 +23,9 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class UrlController {
+    static final int MAX_ATTEMPTS = 5;
+    static final String URL_PREFIX = "http://tinyurl.com/";
     private static final Logger log = LogManager.getLogger();
-    private static final int MAX_ATTEMPTS = 5;
-    private static final String URL_PREFIX = "http://tinyurl.com/";
-
     @Autowired
     private UrlRepository urlRepository;
     @Autowired

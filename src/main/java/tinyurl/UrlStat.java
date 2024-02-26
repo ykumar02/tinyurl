@@ -43,30 +43,6 @@ public class UrlStat {
         this.timestampMillis = timestampMillis;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Url getUrl() {
-        return url;
-    }
-
-    public void setUrl(Url url) {
-        this.url = url;
-    }
-
-    public long getTimestampMillis() {
-        return timestampMillis;
-    }
-
-    public void setTimestampMillis(long timestampMillis) {
-        this.timestampMillis = timestampMillis;
-    }
-
     @Override
     public String toString() {
         return "Url{id=" + id + ", url='" + url + "', timestampMillis='" + timestampMillis + "'}";

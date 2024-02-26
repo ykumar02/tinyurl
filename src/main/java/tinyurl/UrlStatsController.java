@@ -23,7 +23,6 @@ public class UrlStatsController {
     private static final Logger log = LogManager.getLogger();
     private static final String ERROR_MSG = "Unable to get url stats, please try again later.";
     private final ExecutorService statsExecutorService = Executors.newFixedThreadPool(10);
-
     @Autowired
     private UrlRepository urlRepository;
     @Autowired
