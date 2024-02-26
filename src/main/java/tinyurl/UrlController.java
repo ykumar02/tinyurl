@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import tinyurl.random.RandomUrl;
 
+import java.time.Clock;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class UrlController {
@@ -27,9 +29,13 @@ public class UrlController {
 
     @Autowired
     private UrlRepository urlRepository;
-
+    @Autowired
+    private UrlStatRepository urlStatRepository;
     @Autowired
     private RandomUrl randomUrl;
+    @Autowired
+    private Clock clock;
+
 
     @GetMapping("/url/{shortUrl}")
     public String redirect(@PathVariable String shortUrl) {
@@ -40,6 +46,14 @@ public class UrlController {
             log.error("Failed fetching url for short url.", ex);
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Unable to find long url, please try again later.");
         }
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                optUrl.ifPresent(url -> urlStatRepository.save(new UrlStat(url, clock.millis())));
+            } catch (Exception ex) {
+                log.error("Unable to save url stats.", ex);
+            }
+        });
 
         return optUrl.map(Url::getLongUrl)
                      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No url found for the short url provided."));
@@ -54,7 +68,6 @@ public class UrlController {
             log.error("Failed deleting the short url.", ex);
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Unable to delete short url, please try again later.");
         }
-
     }
 
     @PostMapping("/url")
@@ -76,8 +89,8 @@ public class UrlController {
                 log.error("Failed creating short url.", ex);
                 throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Unable to create short url, please try again later.");
             }
-
         }
+
         throw new ResponseStatusException(HttpStatus.CONFLICT, "Failed to create short url, please retry.");
     }
 }
