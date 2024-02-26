@@ -25,3 +25,7 @@
 * Open report: `open build/reports/jacoco/test/html/tinyurl/index.html`
 * Coverage report:
   ![test-coverage-report.png](src%2Ftest%2Fresources%2Ftest-coverage-report.png)
+
+**Future Improvements:**
+* Separate out database server for `tinyurl.url_stats` from `tinyurl.urls`. Deploy read replicas for `tinyurl.url_stats` to scale stats generation endpoint.
+* Partition `tinyurl.urls` on `short_url` to improve service performance as the traffic grows.
