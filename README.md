@@ -12,7 +12,7 @@
 
 **Usage:**
 
-| Command                        | Usage                                                                                               |
+| Command                        | Example                                                                                             |
 |--------------------------------|-----------------------------------------------------------------------------------------------------|
 | Create a short url             | curl 127.0.0.1:8080/url -X POST -d '{"longUrl": "example.com"}' -H "Content-Type: application/json" |
 | Redirect to a long url         | curl 127.0.0.1:8080/url/example                                                                     |
