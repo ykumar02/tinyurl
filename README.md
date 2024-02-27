@@ -29,3 +29,4 @@
 **Future Improvements:**
 * Separate out database server for `tinyurl.url_stats` from `tinyurl.urls`. Deploy read replicas for `tinyurl.url_stats` to scale stats generation endpoint.
 * Partition `tinyurl.urls` table and short url service on `short_url` to improve performance as the traffic grows.
+* Cleanup job to remove unused short urls after a prolonged period of time.
